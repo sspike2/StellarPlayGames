@@ -12,10 +12,9 @@ public static class EventManager
         ScoreUpdated?.Invoke();
     }
 
-    public static event Action<int> HealthUpdated;
-
-    public static void SendHealthUpdatedEvent(int currentHealth)
+    public static Action<int> UpdateScoreUI;
+    public static void SendUpdateScoreUI(int score)
     {
-        HealthUpdated?.Invoke(currentHealth);
+        UpdateScoreUI?.Invoke(score);
     }
 }

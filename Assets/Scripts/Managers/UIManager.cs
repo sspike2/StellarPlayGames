@@ -12,21 +12,21 @@ public enum UIScreens
 }
 public class UIManager : Singleton<UIManager>
 {
-    private GameObject activeScreen;
+    private UIScreenBase activeScreen;
     [Header("UI Screens")]
     [SerializeField]
-    private GameObject MenuMenuScreen;
+    private UIScreenBase MenuMenuScreen;
     [SerializeField]
-    private GameObject GameScreen;
+    private UIScreenBase GameScreen;
     [SerializeField]
-    private GameObject ShopScreen;
+    private UIScreenBase ShopScreen;
     [SerializeField]
-    private GameObject GameOverScreen;
+    private UIScreenBase GameOverScreen;
 
 
     public void ChangeWindow(UIScreens screenToLoad)
     {
-        activeScreen?.SetActive(false);
+        activeScreen?.gameObject.SetActive(false);
 
         switch (screenToLoad)
         {
@@ -43,6 +43,7 @@ public class UIManager : Singleton<UIManager>
                 activeScreen = GameOverScreen;
                 break;
         }
-        activeScreen?.SetActive(true);
-    }   
+        activeScreen.Initialize();
+        activeScreen?.gameObject.SetActive(true);
+    }
 }

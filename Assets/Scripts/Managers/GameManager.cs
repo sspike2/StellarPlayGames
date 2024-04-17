@@ -2,11 +2,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum GameStates
+{
+    MainMenuState,
+    GameplayState,
+    ShopState,
+    GameOverState
+}
 
 public class GameManager : Singleton<GameManager>
 {
 
     private StateMachine stateMachine;
+
+    [SerializeField]
+    private ShopItemScriptableObj[] shopItems;
+
+    public ShopItemScriptableObj[] ShopItems { get { return shopItems; } }
+
+    [SerializeField]
+    private int itemsPerCategory;
+    public int ItemsPerCategory { get { return itemsPerCategory; } }
+
+    private int score;
+    private int coins;
+
+    public int Coins { get { return coins; } }
+    public int Score { get { return score; } }
+
+    private void OnEnable()
+    {
+        EventManager.ScoreUpdated += ScoreUpdatedListener;
+    }
+
+
+    private void OnDisable()
+    {
+        EventManager.ScoreUpdated -= ScoreUpdatedListener;
+    }
+    private void ScoreUpdatedListener()
+    {
+        score += 1;
+        EventManager.SendUpdateScoreUI(score);
+    }
 
     private void Start()
     {
@@ -27,25 +65,24 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+    public void PushState(GameStates state, bool popCurrentState = false)
+    {
+        stateMachine.PushState(state, popCurrentState);
+    }
+
     #region StateMachine
     private class StateMachine
     {
-        public enum GameStates
-        {
-            MainMenuState,
-            GameplayState,
-            PauseState,
-            GameOverState
-        }
 
 
         private Stack<BaseGameState> stateStack = new Stack<BaseGameState>();
 
         private BaseGameState gameplayState = new GameplayState();
         private BaseGameState mainMenuState = new MainMenuState();
+        private BaseGameState shopState = new ShopState();
         public StateMachine()
         {
-            PushState(GameStates.GameplayState);
+            PushState(GameStates.MainMenuState);
         }
 
 
@@ -54,6 +91,8 @@ public class GameManager : Singleton<GameManager>
 
             stateStack?.Peek()?.Update();
         }
+
+
 
 
         /// <summary>
@@ -82,8 +121,8 @@ public class GameManager : Singleton<GameManager>
                 case GameStates.GameplayState:
                     stateStack.Push(gameplayState);
                     break;
-                case GameStates.PauseState:
-                    //stateStack.Push(pauseState);
+                case GameStates.ShopState:
+                    stateStack.Push(shopState);
                     break;
                 case GameStates.GameOverState:
                     //stateStack.Push(gameOverState);
