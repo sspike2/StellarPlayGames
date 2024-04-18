@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MainMenuScreen : UIScreenBase
 {
+    private int cheatButtonClick = 0;
     public override void Initialize()
     {
         base.Initialize();
@@ -24,14 +25,17 @@ public class MainMenuScreen : UIScreenBase
         GameManager.Instance.PushState(GameStates.ShopState);
     }
 
-    public void Quit()
+    public void ShopCoinCheatButton()
     {
-#if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-#else
-        Application.Quit();
-#endif
+        cheatButtonClick++;
+        if (cheatButtonClick > 5)
+        {
+            SaveManager.Instance.CheatCoinsAdd();
+            cheatButtonClick = 0;
+        }
     }
+
+
 
 
 }

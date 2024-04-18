@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting.FullSerializer;
+using System;
 
 public class GamePlayScreen : UIScreenBase
 {
@@ -14,16 +15,10 @@ public class GamePlayScreen : UIScreenBase
     [SerializeField]
     private Button[] choiceButtons;
 
-    private Sprite[] currenttlyEquipedSprites = new Sprite[5];
+    private Sprite[] currentlyEquippedSprites = new Sprite[5];
 
     [SerializeField]
-    private Image AIChoiceImage;
-
-    [SerializeField]
-    private Image PlayerChoiceImage;
-
-    [SerializeField]
-    private Transform playerChoiceFinalPos;
+    private Image AIChoiceImage;  
 
     [SerializeField]
     private GameObject ContinuePopUp;
@@ -32,37 +27,41 @@ public class GamePlayScreen : UIScreenBase
     private TextMeshProUGUI resultText;
 
     [SerializeField]
-    private float cycleDuration = 0.1f; // Time between image changes
+    private float cycleDuration = 0.1f; // AI image cycle duration
 
     [SerializeField]
-    private int cycleCount = 10; // Total number of images shown before stopping
+    private int cycleCount = 10; // Total number of images shown
 
     [SerializeField]
     private ParticleSystem winParticles;
 
 
     private int currentResult;
-    // Start is called before the first frame update
-    void Start()
-    {
-        gameplayState = GameManager.Instance.GetCurrentState() as GameplayState;
-        for (int i = 0; i < 5; i++)
-        {
-            int itemID = SaveManager.Instance.CurrentEquippedItems[i];
-            Sprite sprite = GameManager.Instance.ShopItems[itemID].choiceIcon;
-            currenttlyEquipedSprites[i] = sprite;
-            choiceButtons[i].image.sprite = sprite;
-        }
-        //Reset();
-    }
+   
 
     public override void Initialize()
     {
         base.Initialize();
+        if (gameplayState == null)
+            gameplayState = GameManager.Instance.GetCurrentState() as GameplayState;
+
+        int i = 0;
+        //assign skins to buttons
+        foreach (Choices choice in Enum.GetValues(typeof(Choices)))
+        {
+            int itemID;
+            SaveManager.Instance.CurrentEquippedItems.TryGetValue(choice, out itemID);
+            Sprite sprite = GameManager.Instance.ShopItems[itemID].choiceIcon;
+            currentlyEquippedSprites[i] = sprite;
+            choiceButtons[i].image.sprite = sprite;
+            i++;
+        }
+
+
         Reset();
     }
 
-
+    //Choice Button
     public void PlayerMadeChoice(int playerChoice)
     {
         int aiChoice;
@@ -70,14 +69,21 @@ public class GamePlayScreen : UIScreenBase
         StartCoroutine(CycleImages(aiChoice));
     }
 
+
+    /// <summary>
+    /// Animation for AI choice selection
+    /// </summary>
+    /// <param name="aiChoiceIndex"></param>
+    /// <returns></returns>
     private IEnumerator CycleImages(int aiChoiceIndex)
     {
+        
         int count = 0;
         AIChoiceImage.enabled = true;
         while (count < cycleCount)
         {
             // Cycle through each sprite
-            foreach (var sprite in currenttlyEquipedSprites)
+            foreach (var sprite in currentlyEquippedSprites)
             {
                 AIChoiceImage.sprite = sprite;
                 yield return new WaitForSeconds(cycleDuration);
@@ -85,9 +91,8 @@ public class GamePlayScreen : UIScreenBase
                 if (count >= cycleCount)
                     break;
             }
-        }
-        //Optionally set the final AI choice here, for example:
-        AIChoiceImage.sprite = currenttlyEquipedSprites[aiChoiceIndex];
+        }       
+        AIChoiceImage.sprite = currentlyEquippedSprites[aiChoiceIndex];
         DisplayResult();
     }
 
@@ -100,7 +105,7 @@ public class GamePlayScreen : UIScreenBase
             case 1:
                 resultText.text = "You win!";
                 winParticles.Play();
-                EventManager.SendScoreUpdatedEvent();
+                EventManager.SendScoreUpdatedEvent(true);
                 break;
             case 0:
                 resultText.text = "It's a draw!";

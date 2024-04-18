@@ -16,30 +16,52 @@ public class ShopIcon : MonoBehaviour
 
     [SerializeField]
     private Button purchaseButton;
+
+    ShopScreen shopScreen;
+
+    private void Awake()
+    {
+        shopScreen = GetComponentInParent<ShopScreen>();
+    }
+
+    public void Purchase()
+    {
+        shopScreen.Purchase(this);
+    }
+   
+    /// <summary>
+    /// Setup button icons and images
+    /// </summary>
+    /// <param name="shopItemScriptableObj"></param>
+    /// <param name="index"></param>
     public void SetupIcon(ShopItemScriptableObj shopItemScriptableObj, int index)
     {
         iconImg.sprite = shopItemScriptableObj.choiceIcon;
         if (SaveManager.Instance.ShopUnlocks[index])
         {
-            if (SaveManager.Instance.CurrentEquippedItems.Contains(index))
+            foreach (var item in SaveManager.Instance.CurrentEquippedItems)
             {
-                costText.text = "Equipped";
-                purchaseButton.enabled = false;
-                return;
+                if (item.Value == index)
+                {
+                    costText.text = "Equipped";
+                    purchaseButton.interactable = false;
+                    return;
+                }
             }
+
             costText.text = "Equip";
-            purchaseButton.enabled = true;
+            purchaseButton.interactable = true;
         }
         else
         {
             costText.text = shopItemScriptableObj.cost.ToString();
             if (SaveManager.Instance.Coins > shopItemScriptableObj.cost)
             {
-                purchaseButton.enabled = true;
+                purchaseButton.interactable = true;
             }
             else
             {
-                purchaseButton.enabled = false;
+                purchaseButton.interactable = false;
             }
         }
     }

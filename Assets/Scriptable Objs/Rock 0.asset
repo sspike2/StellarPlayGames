@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111d2f2baeff6f941b5137538072c769, type: 3}
   m_Name: Rock 0
   m_EditorClassIdentifier: 
-  choiceIcon: {fileID: 327899426, guid: fb1cf7a72402aa54bb4cda4b6ccdb158, type: 3}
+  choiceIcon: {fileID: -218198232, guid: 4dafc75cc89115c49a4ddeee2ef1a634, type: 3}
   cost: 0
+  choice: 0

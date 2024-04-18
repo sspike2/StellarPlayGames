@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameplayState : BaseGameState
 {
+    /// <summary>
+    /// Results in 2D array
+    /// </summary>
     private int[,] results = new int[,]
 {
         // R   P   S   L   Sp
@@ -18,6 +21,7 @@ public class GameplayState : BaseGameState
     {
         base.EnterState();
         UIManager.Instance.ChangeWindow(UIScreens.Game);
+        EventManager.SendScoreUpdatedEvent(false);
     }
 
     public override void ResumeState()

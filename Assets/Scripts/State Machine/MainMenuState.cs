@@ -12,6 +12,7 @@ public class MainMenuState : BaseGameState
 
     public override void ResumeState()
     {
+        UIManager.Instance.ChangeWindow(UIScreens.MainMenu);
         base.ResumeState();
     }
 

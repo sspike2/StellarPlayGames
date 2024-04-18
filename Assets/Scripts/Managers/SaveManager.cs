@@ -3,14 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
+/// <summary>
+/// Choice type 
+/// </summary>
+public enum Choices
+{
+    Rock = 0,
+    Paper = 1,
+    Scissor = 2,
+    Lizard = 3,
+    Spock = 4,
+}
 public class SaveManager : Singleton<SaveManager>
 {
+    // List of unlocked items
     private bool[] shopUnlocks;
-    private int highScore;
-    private int coins;
+    private int highScore; // High score saved
+    private int coins; // coins saved
+    private int score; // current score // not saved
 
-    private int[] currentEquippedItems;
+    // keypair for currently equipped skins
+    private Dictionary<Choices, int> currentEquippedItems = new Dictionary<Choices, int>();
 
     private readonly string shopSaveString = "ShopSaveString";
     private readonly string highscoreSaveString = "HighScoreSaveString";
@@ -18,22 +33,66 @@ public class SaveManager : Singleton<SaveManager>
 
 
 
-
+    public int Score { get { return score; } }
     public int HighScore { get { return highScore; } }
     public int Coins { get { return coins; } }
 
-    public int[] CurrentEquippedItems { get { return currentEquippedItems; } }
+    public Dictionary<Choices, int> CurrentEquippedItems { get { return currentEquippedItems; } }
     public bool[] ShopUnlocks { get { return shopUnlocks; } }
-
-
-
 
 
     // Start is called before the first frame update
     void Start()
     {
-        PlayerPrefs.DeleteAll();
         Load();
+    }
+
+    private void OnEnable()
+    {
+        EventManager.ScoreUpdated += ScoreUpdatedListener;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.ScoreUpdated -= ScoreUpdatedListener;
+    }
+    private void ScoreUpdatedListener(bool addScore)
+    {
+        if (addScore)
+        {
+            score += 1;
+        }
+        else
+        {
+            score = 0;
+        }
+        EventManager.SendUpdateScoreUI(score);
+    }
+
+
+    public void UpdateHighScore()
+    {
+        if (score < highScore)
+            return;
+        highScore = score;
+        SaveScore();
+    }
+    public void UpdateCoins()
+    {
+        coins += score * 10;
+        SaveScore();
+    }
+
+    public void CheatCoinsAdd()
+    {
+        coins += 10000;
+        SaveScore();
+    }
+
+    public void ItemPurchased(int index, int cost)
+    {
+        coins -= cost;
+        shopUnlocks[index] = true;
     }
 
 
@@ -43,6 +102,9 @@ public class SaveManager : Singleton<SaveManager>
         SaveScore();
     }
 
+    /// <summary>
+    /// Save method only for shop elements
+    /// </summary>
     public void SaveShop()
     {
         SaveData saveData = new SaveData(shopUnlocks, currentEquippedItems);
@@ -50,7 +112,9 @@ public class SaveManager : Singleton<SaveManager>
         PlayerPrefs.Save();
     }
 
-
+    /// <summary>
+    /// Save method for score and coins
+    /// </summary>
     public void SaveScore()
     {
 
@@ -61,31 +125,22 @@ public class SaveManager : Singleton<SaveManager>
 
     public void Load()
     {
-        LoadJson();
-    }
-
-
-    private void LoadJson()
-    {
         string json = PlayerPrefs.GetString(shopSaveString);
-        Debug.Log(json);
 
         // Save data does not exist
+        // so create new save data
         if (json.Length == 0)
         {
             shopUnlocks = new bool[15];
-            currentEquippedItems = new int[15];
             coins = 0;
             highScore = 0;
-
-            for (int i = 0; i < 5; i++)
+            int j = 0;
+            foreach (Choices choice in Enum.GetValues(typeof(Choices)))
             {
-                currentEquippedItems[i] = i * GameManager.Instance.ItemsPerCategory;
-            }
-
-            for (int i = 0; i < 5; i++)
-            {
-                shopUnlocks[currentEquippedItems[i]] = true;
+                //equip default skins. gap is based on no of skins per category
+                currentEquippedItems.Add(choice, GameManager.Instance.ItemsPerCategory * j);
+                shopUnlocks[GameManager.Instance.ItemsPerCategory * j] = true; // unlock default skins
+                j++;
             }
 
             return;
@@ -93,26 +148,46 @@ public class SaveManager : Singleton<SaveManager>
 
         SaveData savedData = SaveData.FromJson(json);
         shopUnlocks = savedData.shopUnlocks;
-        currentEquippedItems = savedData.currentlyEquippedItems;
 
+        //save the values to dictionary
+        for (int i = 0; i < savedData.currentlyEquippedItems.Length; i++)
+        {
+            currentEquippedItems.Add((Choices)i, savedData.currentlyEquippedItems[i]);
+        }
         coins = PlayerPrefs.GetInt(coinsSaveString);
         highScore = PlayerPrefs.GetInt(highscoreSaveString);
-
     }
 
+    private void OnApplicationQuit()
+    {
+        SaveAll();
+    }
+
+
+
 }
-
-
+#region SerializedSaveClass
+/// <summary>
+/// Save Class
+/// </summary>
 [System.Serializable]
 public class SaveData
 {
     public bool[] shopUnlocks;
     public int[] currentlyEquippedItems;
 
-    public SaveData(bool[] shopUnlocks, int[] currentlyEquippedItems)
+    public SaveData(bool[] shopUnlocks, Dictionary<Choices, int> currentlyEquippedItems)
     {
         this.shopUnlocks = shopUnlocks;
-        this.currentlyEquippedItems = currentlyEquippedItems;
+        this.currentlyEquippedItems = new int[5];
+
+        int i = 0;
+        foreach (var item in currentlyEquippedItems)
+        {
+            this.currentlyEquippedItems[i] = (int)item.Value;
+            i++;
+        }
+
     }
 
     public static SaveData FromJson(string json)
@@ -125,3 +200,4 @@ public class SaveData
         return JsonUtility.ToJson(this);
     }
 }
+#endregion

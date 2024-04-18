@@ -23,7 +23,10 @@ public class UIManager : Singleton<UIManager>
     [SerializeField]
     private UIScreenBase GameOverScreen;
 
-
+    /// <summary>
+    /// load the next screen
+    /// </summary>
+    /// <param name="screenToLoad"></param>
     public void ChangeWindow(UIScreens screenToLoad)
     {
         activeScreen?.gameObject.SetActive(false);
@@ -43,7 +46,7 @@ public class UIManager : Singleton<UIManager>
                 activeScreen = GameOverScreen;
                 break;
         }
-        activeScreen.Initialize();
-        activeScreen?.gameObject.SetActive(true);
+        activeScreen.gameObject.SetActive(true);
+        activeScreen.Initialize(); // initialize new screen
     }
 }

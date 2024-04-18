@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   choiceIcon: {fileID: 21300000, guid: 1a2f408c60074194a8d30cc390fdb1b7, type: 3}
   cost: 500
+  choice: 2

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fb1cf7a72402aa54bb4cda4b6ccdb158
+guid: 4dafc75cc89115c49a4ddeee2ef1a634
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -119,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rock 0
+      name: Spock 0
       rect:
         serializedVersion: 2
-        x: 117
-        y: 42
-        width: 215
-        height: 248
+        x: 4
+        y: 159
+        width: 137
+        height: 141
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,50 +133,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2f10606f2882504f8c5e35400ff5ddb
-      internalID: 327899426
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Paper 0
-      rect:
-        serializedVersion: 2
-        x: 434
-        y: 74
-        width: 341
-        height: 184
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b5202c499c0d56a459d54146fbcfe604
-      internalID: 1828192240
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Scissor 0
-      rect:
-        serializedVersion: 2
-        x: 859
-        y: 80
-        width: 353
-        height: 172
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: db86e48f3c433474db51c50def4985ac
-      internalID: 2067660189
+      spriteID: c9c6afbd8fda65a4db4bc6050e3f0edd
+      internalID: -2091057659
       vertices: []
       indices: 
       edges: []
@@ -185,10 +143,10 @@ TextureImporter:
       name: Lizard 0
       rect:
         serializedVersion: 2
-        x: 1323
-        y: 24
-        width: 197
-        height: 284
+        x: 6
+        y: 19
+        width: 135
+        height: 136
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -196,20 +154,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ff6525c3273cbed4ba87d31e2117cf08
-      internalID: 1111107836
+      spriteID: 2dee354e4a4adbf48a8b67b56f6b1b74
+      internalID: -1050793872
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spock 0
+      name: Rock 0
       rect:
         serializedVersion: 2
-        x: 1692
-        y: 0
-        width: 240
-        height: 338
+        x: 148
+        y: 159
+        width: 140
+        height: 135
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -217,8 +175,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3831c4f7f9425d94f8b63efe8fc3124a
-      internalID: 2143211923
+      spriteID: b966b5df3b605be46b9da685ae13de31
+      internalID: -218198232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scissor 0
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 17
+        width: 136
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df55e333f393b2043bc6cd200d43b363
+      internalID: 837478825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Paper 0
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 156
+        width: 136
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 960535d93fd746946b881f28843ab983
+      internalID: -397829584
       vertices: []
       indices: 
       edges: []
@@ -234,11 +234,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Spock 0: 2143211923
-      Paper 0: 1828192240
-      Lizard 0: 1111107836
-      Scissor 0: 2067660189
-      Rock 0: 327899426
+      Spock 0: -2091057659
+      Paper 0: -397829584
+      Lizard 0: -1050793872
+      Scissor 0: 837478825
+      Rock 0: -218198232
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
